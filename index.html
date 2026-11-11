@@ -1,0 +1,2494 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#160d25">
+<title>My Bubbles | إيناس</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#100817;--pink:#f5a8ce;--gold:#efd19a;--white:#fff4fa;--muted:#d4bfd2;--glass:rgba(255,255,255,.07);--line:rgba(255,255,255,.14);--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{min-height:100%;overflow-x:hidden;color:var(--white);font-family:Cairo,sans-serif;background:radial-gradient(ellipse at 10% 10%,#49234e 0,transparent 35%),radial-gradient(ellipse at 90% 65%,#301c49 0,transparent 38%),var(--bg)}
+body.locked{overflow:hidden}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+#ambient,#hearts,#sparks{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+#ambient{z-index:0}
+#hearts{z-index:4}
+#sparks{z-index:8}
+main,footer,nav{position:relative;z-index:2}
+.orb{position:absolute;width:38vw;height:38vw;border-radius:50%;filter:blur(75px);opacity:.16;animation:orb 17s ease-in-out infinite alternate}
+.orb.a{background:#f06bb1;top:5%;left:-15%}
+.orb.b{background:#8e63d2;right:-15%;top:40%;animation-delay:-8s}
+.orb.c{background:#b74b83;left:35%;bottom:-20%;animation-delay:-12s}
+@keyframes orb{to{transform:translate(8vw,8vh) scale(1.2)}}
+#intro{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;text-align:center;padding:24px;background:radial-gradient(circle at center,#482344,#160d20 60%,#100817);transition:opacity 1s,visibility 1s;overflow:hidden}
+#intro:before,#intro:after{content:"";position:absolute;width:65vmax;height:65vmax;border:1px solid #ffffff12;border-radius:50%;animation:orbit 35s linear infinite}
+#intro:after{width:85vmax;height:85vmax;animation-direction:reverse}
+@keyframes orbit{to{transform:rotate(360deg)}}
+#intro.hide{opacity:0;visibility:hidden;pointer-events:none}
+.intro-content{z-index:1;animation:rise 1.2s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(35px) scale(.96)}to{opacity:1;transform:none}}
+.kicker{color:var(--gold);letter-spacing:5px;font-size:11px}
+.intro-title,.hero h1{font:700 clamp(65px,14vw,125px)/1.3 Amiri,serif;color:var(--pink);text-shadow:0 0 42px #f5a8ce55}
+.intro-bubbles{font-size:48px;margin:18px;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-12px) rotate(8deg)}}
+.intro-copy{color:var(--muted);margin:8px 0 24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 28px;border:1px solid #ffffff35;border-radius:50px;color:white;background:linear-gradient(120deg,#bd5b95,#754a91);box-shadow:0 10px 32px #be5fa033;transition:.3s;position:relative;overflow:hidden}
+.btn:hover{transform:translateY(-4px);box-shadow:0 15px 38px #f4a6ca55}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:#ffffff10;box-shadow:none}
+</style>
+</head>
+
+<body class="locked">
+<div id="ambient">
+  <i class="orb a"></i>
+  <i class="orb b"></i>
+  <i class="orb c"></i>
+</div>
+<div id="hearts"></div>
+<div id="sparks"></div>
+<div id="progress"></div>
+
+<div id="intro">
+  <div class="intro-content">
+    <div class="kicker">A LITTLE WORLD MADE FOR YOU</div>
+    <div class="intro-bubbles">🫧 ♡ 🌸</div>
+    <h1 class="intro-title">إيناس</h1>
+    <p class="intro-copy">هناك عالم صغير ينتظركِ...</p>
+    <button class="btn" id="startButton">ابدئي الحكاية ✧</button>
+    <p class="intro-copy" style="font-size:12px;margin-top:16px">
+      اضغطي هنا لتبدأ الموسيقى وتُفتح المفاجآت
+    </p>
+  </div>
+</div>
+
+<nav class="topbar">
+  <a class="brand" href="#home">My Bubbles ♡</a>
+  <div class="links">
+    <a href="#welcome">البداية</a>
+    <a href="#qualities">مميزاتكِ</a>
+    <a href="#gallery">عالم Kitty</a>
+    <a href="#letter">رسالة</a>
+    <a href="#surprises">مفاجآت</a>
+  </div>
+  <div class="nav-buttons">
+    <button class="icon" id="navMusic" aria-label="الموسيقى">♫</button>
+    <button class="icon" id="heartButton" aria-label="قلوب">♡</button>
+  </div>
+</nav>
+
+<audio id="music" src="music.mp3" loop preload="auto"></audio>
+
+<main id="home">
+
+<header class="hero">
+  <div class="kicker">A LITTLE WORLD MADE FOR YOU</div>
+  <h1>إيناس</h1>
+  <h2>My Bubbles ♡</h2>
+  <p>
+    لأن بعض الأشخاص يستحقون مساحة صغيرة مليئة بالجمال
+    والاهتمام والكلمات الطيبة... صنعت لكِ هذه المساحة
+    لتذكّركِ كم أنتِ مميزة.
+  </p>
+  <div class="actions">
+    <button class="btn" onclick="document.querySelector('#welcome').scrollIntoView({behavior:'smooth'})">
+      اكتشفي عالمكِ ✨
+    </button>
+    <button class="btn ghost" onclick="celebrate()">
+      أمطري العالم قلوبًا ♡
+    </button>
+  </div>
+  <div class="scroll-cue">
+    SCROLL TO EXPLORE
+    <span>⌄</span>
+  </div>
+</header>
+
+<section id="welcome" class="reveal">
+  <div class="heading">
+    <small>CHAPTER 01</small>
+    <h2>إلى صاحبة هذا العالم</h2>
+    <p>بعض الكلمات التي تستحقين سماعها</p>
+  </div>
+  <div class="glass intro-text">
+    إيناس، أردت أن أصنع لكِ شيئًا مختلفًا عن الكلمات المعتادة.
+    شيئًا بسيطًا في فكرته، لكنه مليء بالتفاصيل الجميلة.
+    <br>
+    أنتِ من الأشخاص الذين يتركون أثرًا لطيفًا في يوم الآخرين،
+    بجمالكِ، بروحكِ، بعفويتكِ، وبقلبكِ الحساس.
+    <br>
+    أتمنى أن تجدي هنا قليلًا من البهجة،
+    وأن تبتسمي ولو للحظة وأنتِ تتصفحين هذه الصفحات.
+  </div>
+</section>
+
+<section id="qualities" class="reveal">
+  <div class="heading">
+    <small>CHAPTER 02</small>
+    <h2>ما يجعلكِ مميزة</h2>
+    <p>ليست كل الأشياء الجميلة تُرى بالعين فقط</p>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <div class="emoji">🌸</div>
+      <h3>جمالكِ</h3>
+      <p>في ملامحكِ وتفاصيلكِ الصغيرة جمال له حضوره الخاص، جمال لا يحتاج إلى مبالغة كي يُلاحظ.</p>
+    </article>
+    <article class="card">
+      <div class="emoji">🤍</div>
+      <h3>طيبة قلبكِ</h3>
+      <p>في لطفكِ وطريقتكِ مع الآخرين شيء دافئ يجعل وجودكِ مختلفًا.</p>
+    </article>
+    <article class="card">
+      <div class="emoji">🫧</div>
+      <h3>روحكِ الحساسة</h3>
+      <p>حساسيتكِ ليست عيبًا، بل جزء من رقتكِ وعمق مشاعركِ، وتستحق أن تُفهم وتُحترم.</p>
+    </article>
+    <article class="card">
+      <div class="emoji">🦋</div>
+      <h3>عفويتكِ</h3>
+      <p>تفاصيلكِ العفوية تجعل اللحظات العادية ألطف وأكثر حياة.</p>
+    </article>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="heading">
+    <small>CHAPTER 03</small>
+    <h2>كلمات صغيرة لكِ</h2>
+  </div>
+  <div class="glass poem">
+    يا وردةً مرّت على الأيامِ فازدهرتْ
+    <br>
+    ويا ابتسامةَ صبحٍ حينما ظهرتْ
+    <br><br>
+    فيكِ اللطافةُ لا تُحصى محاسنُها
+    <br>
+    وفيكِ روحٌ من الإحساسِ قد عَبِقَتْ
+    <br><br>
+    إن ضاق يومُكِ لا تنسي بأن غدًا
+    <br>
+    يأتي وفي راحتيهِ <span>فرحةٌ وُعِدَتْ</span>
+    <br><br>
+    كوني كما أنتِ، لا شيءٌ يغيّرُكِ
+    <br>
+    فالأشياءُ الحلوةُ تبقى حينما ثبتتْ
+  </div>
+</section>
+
+<section id="gallery" class="reveal">
+  <div class="heading">
+    <small>CHAPTER 04</small>
+    <h2>عالم Kitty الخاص بكِ</h2>
+    <p>ثماني صور، اختاري أي واحدة لتشاهديها بحجم أكبر ♡</p>
+  </div>
+  <div class="gallery">
+    <button class="photo" onclick="openPhoto(0)">
+      <img src="Kitty1.png" alt="Hello Kitty 1" loading="lazy">
+    </button>
+    <button class="photo" onclick="openPhoto(1)">
+      <img src="Kitty2.png" alt="Hello Kitty 2" loading="lazy">
+    </button>
+    <button class="photo" onclick="openPhoto(2)">
+      <img src="Kitty3.png" alt="Hello Kitty 3" loading="lazy">
+    </button>
+    <button class="photo" onclick="openPhoto(3)">
+      <img src="Kitty4.png" alt="Hello Kitty 4" loading="lazy">
+    </button>
+    <button class="photo" onclick="openPhoto(4)">
+      <img src="Kitty5.png" alt="Hello Kitty 5" loading="lazy">
+    </button>
+    <button class="photo" onclick="openPhoto(5)">
+      <img src="Kitty6.png" alt="Hello Kitty 6" loading="lazy">
+    </button>
+    <button class="photo" onclick="openPhoto(6)">
+      <img src="Kitty7.png" alt="Hello Kitty 7" loading="lazy">
+    </button>
+    <button class="photo" onclick="openPhoto(7)">
+      <img src="Kitty8.png" alt="Hello Kitty 8" loading="lazy">
+    </button>
+  </div>
+  <p class="hint">
+    اضغطي على أي صورة لتكبيرها، ثم تنقلي بين الصور
+  </p>
+</section>
+</main>
+
+<section id="letter" class="reveal">
+  <div class="heading">
+    <small>CHAPTER 05</small>
+    <h2>رسالة من القلب 💌</h2>
+    <p>هناك أشياء لا تكفيها الكلمات العادية</p>
+  </div>
+
+  <div class="glass apology">
+    <div style="font-size:55px;margin-bottom:15px">💗</div>
+    <h3>إلى إيناس...</h3>
+    <p>
+      ربما لا أجد دائمًا الكلمات المناسبة لأعبّر عما أريد قوله،
+      وربما لا تكون كل الأيام مثالية، لكنني أريدكِ أن تعرفي
+      أن وجودكِ يستحق التقدير والاهتمام.
+      <br><br>
+      إذا مررتِ بيوم صعب، فتذكري أنكِ لستِ مطالبة بأن تكوني
+      قوية طوال الوقت. يمكنكِ أن تتعبي، وأن ترتاحي، وأن تبدئي
+      من جديد.
+      <br><br>
+      أتمنى أن تكون أيامكِ القادمة مليئة بالطمأنينة،
+      والضحكات الصادقة، والأشياء الصغيرة التي تجعل قلبكِ سعيدًا.
+      <br><br>
+      كوني بخير دائمًا يا إيناس. ♡
+    </p>
+    <div style="font-size:35px;margin-top:20px">🌷 🫧 🌷</div>
+  </div>
+
+  <div class="envelope-wrap">
+    <button class="envelope" id="envelopeButton" aria-label="افتحي الرسالة">
+      <span class="env-back"></span>
+      <span class="env-letter">رسالة لكِ ♡</span>
+      <span class="env-flap"></span>
+      <span class="env-front"></span>
+    </button>
+  </div>
+
+  <div class="hint">اضغطي على الظرف لفتح رسالة مخبأة بداخله</div>
+
+  <div class="message" id="envelopeMessage">
+    <h3 style="color:var(--pink);font-family:Amiri;font-size:30px">
+      مفاجأة صغيرة لكِ
+    </h3>
+    <p>
+      لو كان بإمكاني أن أضع ابتسامة صغيرة في كل يوم من أيامكِ،
+      لفعلت ذلك دون تردد.
+      <br>
+      أتمنى أن تجدي دائمًا سببًا جديدًا لتبتسمي.
+      <br><br>
+      أنتِ تستحقين الأشياء الجميلة. 🤍
+    </p>
+  </div>
+</section>
+
+<section id="comfort" class="reveal">
+  <div class="heading">
+    <small>CHAPTER 06</small>
+    <h2>حين يكون يومكِ صعبًا</h2>
+  </div>
+  <div class="glass comfort">
+    <div style="font-size:55px;margin-bottom:15px">🌙</div>
+    <h2>خذي نفسًا عميقًا</h2>
+    <p>
+      لا بأس إن لم يكن يومكِ كما تمنيتِ.
+      لا بأس إن شعرتِ بالتعب أو احتجتِ إلى بعض الهدوء.
+      الحياة ليست سباقًا، ولا يجب عليكِ أن تصلي إلى كل شيء
+      دفعة واحدة.
+      <br><br>
+      تذكري أن الأيام تتغير، وأن اللحظات الصعبة لا تستمر إلى الأبد.
+      امنحي نفسكِ بعض اللطف، وكوني صديقة لنفسكِ قبل كل شيء.
+    </p>
+    <button class="btn" style="margin-top:25px" onclick="showComfort()">
+      أحتاج إلى كلمات لطيفة ♡
+    </button>
+    <div class="wish-paper" id="comfortMessage">
+      أنتِ تستحقين الراحة والطمأنينة.
+    </div>
+  </div>
+</section>
+
+<section id="surprises" class="reveal">
+  <div class="heading">
+    <small>CHAPTER 07</small>
+    <h2>حديقة المفاجآت 🌸</h2>
+    <p>كل زر يخفي شيئًا لطيفًا</p>
+  </div>
+
+  <div class="surprise-grid">
+    <div class="glass surprise-card">
+      <div class="emoji">🎁</div>
+      <h3>هدية صغيرة</h3>
+      <p>افتحي هديتكِ واكتشفي ما بداخلها.</p>
+      <button class="btn" onclick="openGift()">افتحي الهدية</button>
+    </div>
+
+    <div class="glass surprise-card">
+      <div class="emoji">💌</div>
+      <h3>رسالة عشوائية</h3>
+      <p>ربما تجدين جملة تحتاجين سماعها اليوم.</p>
+      <button class="btn" onclick="randomWish()">اسحبي رسالة</button>
+    </div>
+
+    <div class="glass surprise-card">
+      <div class="emoji">💖</div>
+      <h3>مطر القلوب</h3>
+      <p>اجعلي الشاشة تمتلئ بالقلوب.</p>
+      <button class="btn" onclick="celebrate()">ابدئي المطر</button>
+    </div>
+
+    <div class="glass surprise-card">
+      <div class="emoji">🌷</div>
+      <h3>وردة اليوم</h3>
+      <p>وردة افتراضية خصيصًا لكِ.</p>
+      <button class="btn" onclick="giveFlower()">أهديـني وردة</button>
+    </div>
+  </div>
+
+  <div class="wish-paper" id="wishPaper">
+    اختاري إحدى المفاجآت أعلاه ♡
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="heading">
+    <small>CHAPTER 08</small>
+    <h2>لعبة صغيرة لكِ 🦋</h2>
+    <p>اختاري الإجابة التي تشبه قلبكِ</p>
+  </div>
+
+  <div class="glass quiz">
+    <div style="font-size:48px">🌈</div>
+    <h3 style="color:var(--pink);margin:15px 0">
+      لو استطعتِ اختيار مكان خيالي الآن، أين ستذهبين؟
+    </h3>
+
+    <div class="quiz-options">
+      <button onclick="answerQuiz('rose')">🌹 حديقة ورود</button>
+      <button onclick="answerQuiz('moon')">🌙 القمر والنجوم</button>
+      <button onclick="answerQuiz('sea')">🌊 شاطئ هادئ</button>
+      <button onclick="answerQuiz('cloud')">☁️ عالم من الغيوم</button>
+    </div>
+
+    <div id="quizResult"></div>
+  </div>
+</section>
+
+<section class="reveal" id="final">
+  <div class="heading">
+    <small>THE LAST CHAPTER</small>
+    <h2>وقبل أن تنتهي الحكاية...</h2>
+  </div>
+
+  <div class="glass comfort">
+    <div style="font-size:65px">🫧 💗 🌸</div>
+    <h2>إيناس، تذكري دائمًا...</h2>
+    <p>
+      أن هذا العالم الصغير صُنع ليحمل لكِ بعض الجمال،
+      وأنكِ تستحقين أيامًا مليئة بالحب والهدوء والضحكات.
+      <br><br>
+      لا تفقدي عفويتكِ، ولا تتخلي عن أحلامكِ،
+      ولا تسمحي ليوم سيئ أن يجعلكِ تنسين كم أنتِ مميزة.
+      <br><br>
+      أتمنى أن تظل الحياة لطيفة معكِ،
+      وأن تجدي في كل صباح سببًا جديدًا للابتسام.
+    </p>
+    <div style="font:700 38px Amiri;color:var(--pink);margin-top:20px">
+      With love, always ♡
+    </div>
+    <button class="btn" onclick="celebrate();randomWish()" style="margin-top:25px">
+      اصنعي نهاية سعيدة ✨
+    </button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  صُنع بعناية ومحبة من أجل <strong>إيناس</strong>
+  <div style="font-size:25px;margin-top:10px">♡ 🌸 🫧 ♡</div>
+  <p style="margin-top:10px">My Bubbles — A little world made for you.</p>
+</footer>
+
+<style>
+/* =========================================
+   MY BUBBLES — ROYAL ROMANCE EXPERIENCE
+   ROMANTIC BACKGROUND SYSTEM
+========================================= */
+
+:root{
+  --romance-pink:#ff9acb;
+  --romance-rose:#e86ba8;
+  --romance-purple:#9e77dc;
+  --romance-blue:#829dff;
+  --romance-gold:#f5d69c;
+  --romance-white:#fff8fd;
+  --romance-glass:rgba(255,255,255,.09);
+  --romance-border:rgba(255,255,255,.18);
+}
+
+body{
+  transition:
+    background 1.5s ease,
+    color 1s ease,
+    filter 1s ease;
+}
+
+body.dream-mode{
+  --bg:#10142e;
+  --pink:#b9a8ff;
+  --gold:#a8d8ff;
+  --white:#f4f4ff;
+  --muted:#c4c8e9;
+  background:
+    radial-gradient(circle at 15% 20%,#403d80,transparent 40%),
+    radial-gradient(circle at 85% 70%,#243c70,transparent 40%),
+    #10142e;
+}
+
+body.sunset-mode{
+  --bg:#29121e;
+  --pink:#ffb2a6;
+  --gold:#ffe0a5;
+  --white:#fff5ec;
+  --muted:#f0c8c4;
+  background:
+    radial-gradient(circle at 15% 10%,#a34b65,transparent 40%),
+    radial-gradient(circle at 85% 75%,#713c65,transparent 45%),
+    #29121e;
+}
+
+body.ocean-mode{
+  --bg:#081d2b;
+  --pink:#8de6ed;
+  --gold:#b4e5ff;
+  --white:#edffff;
+  --muted:#b4dce8;
+  background:
+    radial-gradient(circle at 20% 20%,#18546b,transparent 40%),
+    radial-gradient(circle at 80% 70%,#183c68,transparent 45%),
+    #081d2b;
+}
+
+body.rose-mode{
+  --bg:#2a1025;
+  --pink:#ff8fc5;
+  --gold:#f6c5a7;
+  --white:#fff0f8;
+  --muted:#e8bfd8;
+  background:
+    radial-gradient(circle at 20% 10%,#87375f,transparent 42%),
+    radial-gradient(circle at 80% 80%,#54245b,transparent 45%),
+    #2a1025;
+}
+
+body.midnight-mode{
+  --bg:#09091a;
+  --pink:#d2a7ff;
+  --gold:#e9d5ff;
+  --white:#f8f2ff;
+  --muted:#c8b9df;
+  background:
+    radial-gradient(circle at 50% 0%,#392451,transparent 45%),
+    radial-gradient(circle at 10% 90%,#211a4a,transparent 45%),
+    #09091a;
+}
+
+/* خلفية النجوم */
+
+#ambient{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.star{
+  position:absolute;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:white;
+  opacity:.45;
+  box-shadow:0 0 8px white;
+  animation:twinkle 3s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle{
+  0%{
+    opacity:.15;
+    transform:scale(.6);
+  }
+  100%{
+    opacity:.9;
+    transform:scale(1.5);
+  }
+}
+
+/* قلوب عائمة */
+
+.floating-heart{
+  position:fixed;
+  bottom:-60px;
+  z-index:4;
+  pointer-events:none;
+  color:#ff9acb;
+  text-shadow:0 0 15px #ff72b7;
+  animation:heartJourney linear forwards;
+}
+
+@keyframes heartJourney{
+  0%{
+    transform:translate3d(0,0,0) rotate(0) scale(.5);
+    opacity:0;
+  }
+  15%{
+    opacity:.9;
+  }
+  50%{
+    transform:translate3d(35px,-55vh,0) rotate(25deg) scale(1);
+  }
+  100%{
+    transform:translate3d(-30px,-115vh,0) rotate(-25deg) scale(1.5);
+    opacity:0;
+  }
+}
+
+/* ورود متساقطة */
+
+.rose-petal{
+  position:fixed;
+  top:-50px;
+  z-index:3;
+  pointer-events:none;
+  font-size:20px;
+  animation:petalFall linear forwards;
+}
+
+@keyframes petalFall{
+  0%{
+    transform:translateY(-30px) rotate(0deg);
+    opacity:0;
+  }
+  10%{
+    opacity:.9;
+  }
+  50%{
+    transform:translateY(50vh) translateX(60px) rotate(180deg);
+  }
+  100%{
+    transform:translateY(110vh) translateX(-50px) rotate(450deg);
+    opacity:0;
+  }
+}
+
+/* فقاعات شفافة */
+
+.bubble{
+  position:fixed;
+  bottom:-100px;
+  z-index:3;
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:50%;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 30% 25%,
+      rgba(255,255,255,.8),
+      rgba(255,255,255,.08) 35%,
+      rgba(245,168,206,.12) 70%);
+  box-shadow:
+    inset -5px -5px 15px #ffffff12,
+    inset 5px 5px 15px #ffffff25,
+    0 0 20px #f5a8ce20;
+  animation:bubbleRise linear forwards;
+}
+
+.bubble:after{
+  content:"";
+  position:absolute;
+  top:17%;
+  left:22%;
+  width:22%;
+  height:12%;
+  border-radius:50%;
+  background:#ffffffa8;
+  transform:rotate(-35deg);
+}
+
+@keyframes bubbleRise{
+  0%{
+    transform:translateY(0) translateX(0) scale(.6);
+    opacity:0;
+  }
+  15%{
+    opacity:.75;
+  }
+  50%{
+    transform:translateY(-55vh) translateX(35px) scale(1);
+  }
+  100%{
+    transform:translateY(-120vh) translateX(-30px) scale(1.2);
+    opacity:0;
+  }
+}
+
+/* توهج وردي عام */
+
+.romantic-glow{
+  position:relative;
+  isolation:isolate;
+}
+
+.romantic-glow:before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  z-index:-1;
+  border-radius:inherit;
+  background:linear-gradient(
+    120deg,
+    #ff8fc5,
+    #a78bfa,
+    #7bdde8,
+    #ff8fc5
+  );
+  background-size:300% 300%;
+  opacity:0;
+  filter:blur(15px);
+  transition:opacity .5s;
+  animation:glowFlow 7s linear infinite;
+}
+
+.romantic-glow:hover:before{
+  opacity:.45;
+}
+
+@keyframes glowFlow{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* تأثيرات الأزرار */
+
+.btn{
+  isolation:isolate;
+  transform-style:preserve-3d;
+  transition:
+    transform .4s cubic-bezier(.2,.8,.2,1),
+    box-shadow .4s,
+    background .5s;
+}
+
+.btn:before{
+  content:"";
+  position:absolute;
+  top:-100%;
+  left:-60%;
+  width:35%;
+  height:300%;
+  transform:rotate(25deg);
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #ffffff77,
+    transparent
+  );
+  transition:left .8s;
+  z-index:-1;
+}
+
+.btn:hover:before{
+  left:140%;
+}
+
+.btn:hover{
+  transform:translateY(-5px) scale(1.025);
+  box-shadow:
+    0 12px 30px #f5a8ce35,
+    0 0 25px #f5a8ce20;
+}
+
+.btn:active{
+  transform:scale(.94);
+}
+
+/* لمعان البطاقات */
+
+.card,.glass,.surprise-card{
+  transition:
+    transform .5s ease,
+    border-color .5s ease,
+    box-shadow .5s ease,
+    background .5s ease;
+}
+
+.card:hover,.surprise-card:hover{
+  border-color:#ff9acb99;
+  box-shadow:
+    0 20px 45px #0004,
+    0 0 25px #ff9acb17;
+}
+
+/* تأثيرات الصور */
+
+.photo{
+  transition:
+    transform .5s ease,
+    box-shadow .5s ease,
+    border-color .5s ease;
+}
+
+.photo:hover{
+  transform:translateY(-8px) rotate(.5deg);
+  box-shadow:0 18px 35px #ff8fc533;
+  border-color:#ff9acb;
+}
+
+/* انتقالات الأقسام */
+
+section{
+  transition:opacity .8s ease;
+}
+
+section.reveal{
+  transform:translateY(45px);
+  opacity:0;
+  filter:blur(5px);
+  transition:
+    transform 1s cubic-bezier(.2,.8,.2,1),
+    opacity 1s ease,
+    filter 1s ease;
+}
+
+section.reveal.visible{
+  transform:translateY(0);
+  opacity:1;
+  filter:blur(0);
+}
+
+/* عنوان متوهج */
+
+.heading h2{
+  text-shadow:
+    0 0 12px #f5a8ce30,
+    0 0 35px #f5a8ce20;
+}
+
+/* نجمة متحركة */
+
+.magic-star{
+  position:fixed;
+  z-index:9;
+  pointer-events:none;
+  color:#ffe6a9;
+  font-size:20px;
+  animation:starBurst 1.5s ease-out forwards;
+}
+
+@keyframes starBurst{
+  0%{
+    transform:translate(0,0) scale(.2) rotate(0);
+    opacity:0;
+  }
+  20%{opacity:1}
+  100%{
+    transform:translate(var(--x),var(--y)) scale(1.5) rotate(180deg);
+    opacity:0;
+  }
+}
+
+/* وضع الأحلام */
+
+body.dream-mode .heading h2,
+body.dream-mode .hero h1{
+  text-shadow:0 0 30px #b9a8ff88;
+}
+
+body.ocean-mode .bubble{
+  border-color:#a8f4ff99;
+}
+
+body.sunset-mode .rose-petal{
+  filter:drop-shadow(0 0 8px #ffb2a6);
+}
+
+/* استجابة الهاتف */
+
+@media(max-width:800px){
+  .cards,.surprise-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .gallery{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .links{
+    gap:8px;
+  }
+  .links a{
+    font-size:10px;
+  }
+}
+
+@media(max-width:520px){
+  .topbar{
+    padding:7px 10px;
+  }
+  .brand{
+    font-size:17px;
+  }
+  .links{
+    display:none;
+  }
+  .cards,.surprise-grid{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  section{
+    padding:65px 0;
+  }
+  .glass{
+    padding:20px;
+    border-radius:22px;
+  }
+  .btn{
+    padding:12px 18px;
+    font-size:13px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+    transition-duration:.01ms!important;
+  }
+}
+</style>
+
+<!-- =========================================
+     MY BUBBLES — INTERACTIVE ROMANCE PANEL
+========================================= -->
+
+<div id="ambient"></div>
+
+<!-- لوحة الأجواء -->
+<div class="theme-panel" id="themePanel">
+  <div class="theme-panel-title">
+    <span>✨ أجواء إيناس</span>
+    <button onclick="toggleThemePanel()" aria-label="إغلاق">×</button>
+  </div>
+
+  <p>اختاري العالم الذي يشبه قلبكِ اليوم</p>
+
+  <div class="theme-options">
+    <button onclick="setRomanceTheme('default')">
+      🌸 الوردي
+    </button>
+
+    <button onclick="setRomanceTheme('dream')">
+      💜 عالم الأحلام
+    </button>
+
+    <button onclick="setRomanceTheme('sunset')">
+      🌅 الغروب
+    </button>
+
+    <button onclick="setRomanceTheme('ocean')">
+      🌊 المحيط
+    </button>
+
+    <button onclick="setRomanceTheme('rose')">
+      🌹 عالم الورود
+    </button>
+
+    <button onclick="setRomanceTheme('midnight')">
+      🌙 منتصف الليل
+    </button>
+  </div>
+
+  <div class="theme-message">
+    كل عالم هنا صُمّم ليذكّركِ بأنكِ مميزة 💗
+  </div>
+</div>
+
+<!-- أزرار التحكم العائمة -->
+<div class="floating-controls">
+  <button
+    class="floating-control"
+    onclick="toggleThemePanel()"
+    title="تغيير الأجواء">
+    🎨
+  </button>
+
+  <button
+    class="floating-control"
+    onclick="celebrate()"
+    title="أمطار القلوب">
+    💗
+  </button>
+
+  <button
+    class="floating-control"
+    onclick="createRoseRain()"
+    title="أمطار الورود">
+    🌹
+  </button>
+
+  <button
+    class="floating-control"
+    onclick="createBubbleRain()"
+    title="فقاعات">
+    🫧
+  </button>
+
+  <button
+    class="floating-control"
+    onclick="randomWish()"
+    title="رسالة عشوائية">
+    💌
+  </button>
+</div>
+
+<!-- شريط تقدم القراءة -->
+<div id="readingProgress"></div>
+
+<!-- زر العودة للأعلى -->
+<button
+  id="backToTop"
+  onclick="window.scrollTo({top:0,behavior:'smooth'})"
+  aria-label="العودة للأعلى">
+  ↑
+</button>
+
+<!-- صندوق الرسائل -->
+<div id="romanceToast" role="status" aria-live="polite"></div>
+
+<style>
+/* لوحة الأجواء */
+
+.theme-panel{
+  position:fixed;
+  top:90px;
+  right:18px;
+  width:min(320px,calc(100vw - 36px));
+  padding:22px;
+  z-index:1000;
+  background:rgba(35,18,43,.92);
+  border:1px solid #ffb6da66;
+  border-radius:25px;
+  backdrop-filter:blur(22px);
+  box-shadow:0 15px 50px #0005;
+  color:#fff;
+  transform:translateX(120%);
+  opacity:0;
+  visibility:hidden;
+  transition:
+    transform .55s cubic-bezier(.2,.8,.2,1),
+    opacity .4s,
+    visibility .4s;
+}
+
+.theme-panel.open{
+  transform:translateX(0);
+  opacity:1;
+  visibility:visible;
+}
+
+.theme-panel-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:19px;
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+.theme-panel-title button{
+  border:0;
+  background:#ffffff19;
+  color:white;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.theme-panel p{
+  color:#f4c8df;
+  font-size:13px;
+  line-height:1.8;
+}
+
+.theme-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:16px;
+}
+
+.theme-options button{
+  border:1px solid #ffffff25;
+  color:white;
+  padding:12px 8px;
+  border-radius:13px;
+  cursor:pointer;
+  background:linear-gradient(135deg,#ffffff19,#ffffff08);
+  transition:all .3s ease;
+  font-family:inherit;
+}
+
+.theme-options button:hover{
+  background:#ff91c4;
+  color:#38132a;
+  transform:translateY(-3px);
+}
+
+.theme-message{
+  margin-top:18px;
+  padding:12px;
+  border-radius:14px;
+  text-align:center;
+  font-size:12px;
+  background:#ff9acb18;
+  color:#ffd9eb;
+}
+
+/* الأزرار العائمة */
+
+.floating-controls{
+  position:fixed;
+  left:15px;
+  bottom:25px;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.floating-control{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:1px solid #ffffff50;
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(15px);
+  color:white;
+  font-size:20px;
+  cursor:pointer;
+  box-shadow:0 5px 20px #0002;
+  transition:all .3s ease;
+}
+
+.floating-control:hover{
+  transform:scale(1.13) rotate(10deg);
+  background:#e98ab8;
+  box-shadow:0 0 22px #ff9acb88;
+}
+
+/* تقدم القراءة */
+
+#readingProgress{
+  position:fixed;
+  top:0;
+  left:0;
+  height:4px;
+  width:0;
+  z-index:2000;
+  background:linear-gradient(
+    90deg,
+    #ff7db7,
+    #c69bff,
+    #ffe4ad
+  );
+  box-shadow:0 0 12px #ff8fc5;
+}
+
+/* زر العودة */
+
+#backToTop{
+  position:fixed;
+  right:18px;
+  bottom:24px;
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  border:1px solid #ffffff55;
+  background:#e98ab8;
+  color:white;
+  font-size:22px;
+  cursor:pointer;
+  z-index:99;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(15px);
+  transition:all .3s ease;
+}
+
+#backToTop.show{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+
+/* الرسائل المؤقتة */
+
+#romanceToast{
+  position:fixed;
+  left:50%;
+  bottom:28px;
+  transform:translate(-50%,30px);
+  opacity:0;
+  visibility:hidden;
+  z-index:3000;
+  width:max-content;
+  max-width:calc(100vw - 40px);
+  padding:14px 22px;
+  border:1px solid #ffffff55;
+  border-radius:18px;
+  background:rgba(54,25,54,.94);
+  color:#fff;
+  text-align:center;
+  line-height:1.8;
+  box-shadow:0 12px 35px #0004;
+  transition:all .4s ease;
+}
+
+#romanceToast.visible{
+  opacity:1;
+  visibility:visible;
+  transform:translate(-50%,0);
+}
+
+/* تأثيرات اللمس */
+
+.touch-heart{
+  position:fixed;
+  z-index:5000;
+  pointer-events:none;
+  font-size:22px;
+  animation:touchHeart .9s ease-out forwards;
+}
+
+@keyframes touchHeart{
+  0%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(.5);
+  }
+  100%{
+    opacity:0;
+    transform:
+      translate(
+        calc(-50% + var(--move-x)),
+        calc(-50% - 90px)
+      )
+      scale(1.6)
+      rotate(25deg);
+  }
+}
+
+@media(max-width:520px){
+  .theme-panel{
+    top:75px;
+    right:10px;
+  }
+
+  .floating-controls{
+    left:9px;
+    bottom:18px;
+    gap:8px;
+  }
+
+  .floating-control{
+    width:40px;
+    height:40px;
+    font-size:17px;
+  }
+
+  #backToTop{
+    right:10px;
+    bottom:18px;
+  }
+}
+</style>
+
+<script>
+/* =========================================
+   ROMANTIC INTERACTION ENGINE
+========================================= */
+
+(function(){
+
+  "use strict";
+
+  const body = document.body;
+
+  const toast = document.getElementById(
+    "romanceToast"
+  );
+
+  const panel = document.getElementById(
+    "themePanel"
+  );
+
+  let toastTimer = null;
+
+  /* الرسائل الجميلة */
+
+  function showRomanceToast(message){
+
+    if(!toast) return;
+
+    toast.textContent = message;
+
+    toast.classList.add("visible");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(function(){
+
+      toast.classList.remove("visible");
+
+    },3500);
+
+  }
+
+  window.showRomanceToast =
+    showRomanceToast;
+
+
+  /* تغيير الأجواء */
+
+  window.setRomanceTheme = function(theme){
+
+    const themes = [
+      "dream-mode",
+      "sunset-mode",
+      "ocean-mode",
+      "rose-mode",
+      "midnight-mode"
+    ];
+
+    body.classList.remove(...themes);
+
+    const selected = {
+
+      dream:"dream-mode",
+
+      sunset:"sunset-mode",
+
+      ocean:"ocean-mode",
+
+      rose:"rose-mode",
+
+      midnight:"midnight-mode"
+
+    };
+
+    if(selected[theme]){
+
+      body.classList.add(selected[theme]);
+
+    }
+
+    showRomanceToast(
+      "تم تغيير عالمكِ الجميل 💗"
+    );
+
+    createMagicStars(12);
+
+  };
+
+
+  /* فتح وإغلاق لوحة الأجواء */
+
+  window.toggleThemePanel = function(){
+
+    if(!panel) return;
+
+    panel.classList.toggle("open");
+
+  };
+
+
+  /* توليد النجوم */
+
+  window.createMagicStars = function(amount=15){
+
+    for(let i=0;i<amount;i++){
+
+      const star = document.createElement("span");
+
+      star.className = "magic-star";
+
+      star.textContent = "✦";
+
+      star.style.left =
+        Math.random()*100+"vw";
+
+      star.style.top =
+        Math.random()*100+"vh";
+
+      star.style.setProperty(
+        "--x",
+        (Math.random()*180-90)+"px"
+      );
+
+      star.style.setProperty(
+        "--y",
+        (Math.random()*180-90)+"px"
+      );
+
+      document.body.appendChild(star);
+
+      setTimeout(function(){
+
+        star.remove();
+
+      },1600);
+
+    }
+
+  };
+
+
+  /* أمطار القلوب */
+
+  window.celebrate = function(){
+
+    const hearts = [
+      "💗","💖","💕","💓","💞",
+      "❤️","💘","💝","🩷","♥"
+    ];
+
+    for(let i=0;i<35;i++){
+
+      setTimeout(function(){
+
+        const heart =
+          document.createElement("div");
+
+        heart.className = "floating-heart";
+
+        heart.textContent =
+          hearts[Math.floor(
+            Math.random()*hearts.length
+          )];
+
+        heart.style.left =
+          Math.random()*100+"vw";
+
+        heart.style.fontSize =
+          (15+Math.random()*25)+"px";
+
+        heart.style.animationDuration =
+          (5+Math.random()*6)+"s";
+
+        document.body.appendChild(heart);
+
+        setTimeout(function(){
+
+          heart.remove();
+
+        },12000);
+
+      },i*90);
+
+    }
+
+    showRomanceToast(
+      "هذه القلوب كلها تحمل لكِ رسالة حب 💗"
+    );
+
+  };
+
+
+  /* أمطار الورود */
+
+  window.createRoseRain = function(){
+
+    const flowers = [
+      "🌹","🌸","🌷","💐","🌺","🌼"
+    ];
+
+    for(let i=0;i<30;i++){
+
+      setTimeout(function(){
+
+        const petal =
+          document.createElement("div");
+
+        petal.className = "rose-petal";
+
+        petal.textContent =
+          flowers[Math.floor(
+            Math.random()*flowers.length
+          )];
+
+        petal.style.left =
+          Math.random()*100+"vw";
+
+        petal.style.fontSize =
+          (16+Math.random()*22)+"px";
+
+        petal.style.animationDuration =
+          (5+Math.random()*6)+"s";
+
+        document.body.appendChild(petal);
+
+        setTimeout(function(){
+
+          petal.remove();
+
+        },12000);
+
+      },i*100);
+
+    }
+
+    showRomanceToast(
+      "وردة لكل لحظة جميلة في حياتكِ 🌹"
+    );
+
+  };
+
+
+  /* أمطار الفقاعات */
+
+  window.createBubbleRain = function(){
+
+    for(let i=0;i<25;i++){
+
+      setTimeout(function(){
+
+        const bubble =
+          document.createElement("div");
+
+        bubble.className = "bubble";
+
+        const size =
+          15+Math.random()*55;
+
+        bubble.style.width =
+          size+"px";
+
+        bubble.style.height =
+          size+"px";
+
+        bubble.style.left =
+          Math.random()*100+"vw";
+
+        bubble.style.animationDuration =
+          (6+Math.random()*7)+"s";
+
+        document.body.appendChild(bubble);
+
+        setTimeout(function(){
+
+          bubble.remove();
+
+        },14000);
+
+      },i*120);
+
+    }
+
+    showRomanceToast(
+      "فقاعات من السعادة تطير نحوكِ 🫧"
+    );
+
+  };
+
+
+  /* رسائل عشوائية */
+
+  const wishes = [
+
+    "إيناس، وجودكِ يجعل التفاصيل الصغيرة أجمل. 💗",
+
+    "أتمنى أن يبتسم قلبكِ اليوم قبل شفتيكِ. 🌸",
+
+    "هناك أشخاص يشبهون الضوء، وأنتِ واحدة منهم. ✨",
+
+    "لو كان الجمال رسالة، لكان اسمكِ عنوانها. 💌",
+
+    "أتمنى أن تجدي في كل يوم سببًا جديدًا للسعادة. 🌷",
+
+    "أنتِ لستِ مجرد ذكرى جميلة، بل حكاية كاملة. 💞",
+
+    "حتى النجوم تبدو أكثر هدوءًا عندما نتذكر الأشخاص المميزين. 🌙",
+
+    "لا تنسي أبدًا أنكِ تستحقين كل الأشياء الجميلة. 🩷",
+
+    "بعض الأرواح تجعل العالم ألطف بمجرد وجودها. 🌹",
+
+    "أتمنى أن تكون أيامكِ مليئة بالضحكات والطمأنينة. 🦋",
+
+    "ابتسامتكِ تستحق أن تتكرر ألف مرة. 💖",
+
+    "كل زهرة هنا تذكير صغير بأن الجمال موجود حولكِ. 🌺"
+
+  ];
+
+  window.randomWish = function(){
+
+    const message =
+      wishes[Math.floor(
+        Math.random()*wishes.length
+      )];
+
+    showRomanceToast(message);
+
+    createMagicStars(8);
+
+  };
+
+
+  /* قلوب عند لمس الشاشة */
+
+  document.addEventListener(
+    "pointerdown",
+    function(event){
+
+      if(
+        event.target.closest("button") ||
+        event.target.closest("a") ||
+        event.target.closest("input") ||
+        event.target.closest("textarea")
+      ){
+
+        return;
+
+      }
+
+      const heart =
+        document.createElement("span");
+
+      heart.className = "touch-heart";
+
+      heart.textContent =
+        ["💗","✨","💕","🌸"][
+          Math.floor(Math.random()*4)
+        ];
+
+      heart.style.left =
+        event.clientX+"px";
+
+      heart.style.top =
+        event.clientY+"px";
+
+      heart.style.setProperty(
+        "--move-x",
+        (Math.random()*70-35)+"px"
+      );
+
+      document.body.appendChild(heart);
+
+      setTimeout(function(){
+
+        heart.remove();
+
+      },1000);
+
+    }
+  );
+
+
+  /* النجوم في الخلفية */
+
+  const ambient =
+    document.getElementById("ambient");
+
+  if(ambient){
+
+    for(let i=0;i<65;i++){
+
+      const star =
+        document.createElement("span");
+
+      star.className = "star";
+
+      star.style.left =
+        Math.random()*100+"%";
+
+      star.style.top =
+        Math.random()*100+"%";
+
+      star.style.animationDelay =
+        Math.random()*4+"s";
+
+      star.style.animationDuration =
+        (2+Math.random()*4)+"s";
+
+      ambient.appendChild(star);
+
+    }
+
+  }
+
+
+  /* تقدم القراءة */
+
+  function updateReadingProgress(){
+
+    const scrollTop =
+      window.scrollY;
+
+    const documentHeight =
+      document.documentElement.scrollHeight -
+      window.innerHeight;
+
+    const percentage =
+      documentHeight>0
+      ? (scrollTop/documentHeight)*100
+      : 0;
+
+    const progress =
+      document.getElementById(
+        "readingProgress"
+      );
+
+    if(progress){
+
+      progress.style.width =
+        percentage+"%";
+
+    }
+
+    const back =
+      document.getElementById(
+        "backToTop"
+      );
+
+    if(back){
+
+      back.classList.toggle(
+        "show",
+        scrollTop>450
+      );
+
+    }
+
+  }
+
+  window.addEventListener(
+    "scroll",
+    updateReadingProgress,
+    {passive:true}
+  );
+
+  updateReadingProgress();
+
+
+  /* إغلاق لوحة الأجواء عند الضغط خارجها */
+
+  document.addEventListener(
+    "click",
+    function(event){
+
+      if(
+        panel &&
+        panel.classList.contains("open") &&
+        !panel.contains(event.target) &&
+        !event.target.closest(
+          ".floating-control"
+        )
+      ){
+
+        panel.classList.remove("open");
+
+      }
+
+    }
+  );
+
+
+  /* ظهور الأقسام عند الوصول إليها */
+
+  const revealSections =
+    document.querySelectorAll("section");
+
+  if("IntersectionObserver" in window){
+
+    const revealObserver =
+      new IntersectionObserver(
+        function(entries){
+
+          entries.forEach(function(entry){
+
+            if(entry.isIntersecting){
+
+              entry.target.classList.add(
+                "visible"
+              );
+
+              revealObserver.unobserve(
+                entry.target
+              );
+
+            }
+
+          });
+
+        },
+        {
+          threshold:.12
+        }
+      );
+
+    revealSections.forEach(function(section){
+
+      section.classList.add("reveal");
+
+      revealObserver.observe(section);
+
+    });
+
+  }
+
+
+  /* تشغيل المؤثرات تلقائيًا */
+
+  setTimeout(function(){
+
+    createMagicStars(18);
+
+  },1200);
+
+
+  /* رسالة ترحيب */
+
+  setTimeout(function(){
+
+    showRomanceToast(
+      "مرحبًا بكِ في عالمكِ الجميل يا إيناس 💗"
+    );
+
+  },2200);
+
+
+})();
+</script>
+
+<!-- =========================================
+     MY BUBBLES — FINAL ROMANTIC EXPERIENCE
+========================================= -->
+
+<!-- نافذة عرض الصور -->
+<div id="photoLightbox" class="photo-lightbox">
+  <button class="lightbox-close" onclick="closePhoto()">×</button>
+  <button class="lightbox-arrow lightbox-prev"
+    onclick="changePhoto(-1)">‹</button>
+
+  <img id="lightboxImage" src="" alt="صورة جميلة">
+
+  <button class="lightbox-arrow lightbox-next"
+    onclick="changePhoto(1)">›</button>
+
+  <p id="lightboxCaption"></p>
+</div>
+
+<!-- صندوق الرسالة السرية -->
+<div id="secretModal" class="romantic-modal">
+  <div class="modal-content">
+    <button class="modal-close"
+      onclick="closeSecret()">×</button>
+
+    <div class="modal-icon">💌</div>
+    <h2>رسالة صغيرة إلى إيناس</h2>
+    <p id="secretMessage">
+      بعض الأشخاص لا يحتاجون إلى مناسبة
+      حتى نخبرهم بأنهم مميزون.
+      وجودهم وحده مناسبة جميلة. 💗
+    </p>
+    <button class="btn" onclick="closeSecret()">
+      أغلقي الرسالة بابتسامة 🌸
+    </button>
+  </div>
+</div>
+
+<!-- نافذة المفاجأة -->
+<div id="giftModal" class="romantic-modal">
+  <div class="modal-content gift-content">
+    <button class="modal-close"
+      onclick="closeGift()">×</button>
+
+    <div class="gift-animation">🎁</div>
+    <h2>مفاجأة صغيرة لكِ!</h2>
+
+    <p>
+      لو استطعت أن أهديكِ شيئًا واحدًا،
+      لأهديتكِ القدرة على رؤية نفسكِ
+      كما يراكِ الأشخاص الذين يحبونكِ:
+      جميلة، مميزة، وتستحقين السعادة. 💖
+    </p>
+
+    <div class="gift-stars">✨ 🌸 💗 🌸 ✨</div>
+
+    <button class="btn" onclick="celebrate();closeGift()">
+      أريد المزيد من السعادة 💕
+    </button>
+  </div>
+</div>
+
+<!-- نافذة الموسيقى -->
+<div id="musicModal" class="romantic-modal">
+  <div class="modal-content">
+    <button class="modal-close"
+      onclick="closeMusicInfo()">×</button>
+
+    <div class="modal-icon">🎵</div>
+    <h2>موسيقى عالم إيناس</h2>
+
+    <p>
+      يمكنكِ تشغيل الموسيقى إذا كان ملف صوتي
+      موجودًا داخل الصفحة.
+      اضغطي على زر الموسيقى للتحكم بها.
+    </p>
+
+    <button class="btn" onclick="toggleMusic()">
+      تشغيل / إيقاف الموسيقى
+    </button>
+  </div>
+</div>
+
+<style>
+/* نافذة الصور */
+
+.photo-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  padding:25px;
+  background:rgba(8,5,18,.94);
+  backdrop-filter:blur(20px);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .4s,visibility .4s;
+}
+
+.photo-lightbox.active{
+  opacity:1;
+  visibility:visible;
+}
+
+.photo-lightbox img{
+  max-width:min(850px,85vw);
+  max-height:75vh;
+  object-fit:contain;
+  border-radius:20px;
+  border:2px solid #ffffff45;
+  box-shadow:0 0 50px #ff8fc544;
+  animation:photoAppear .5s ease;
+}
+
+@keyframes photoAppear{
+  from{
+    transform:scale(.8) rotate(-2deg);
+    opacity:0;
+  }
+  to{
+    transform:scale(1) rotate(0);
+    opacity:1;
+  }
+}
+
+.lightbox-close{
+  position:absolute;
+  top:20px;
+  right:25px;
+  border:0;
+  color:white;
+  background:#ffffff20;
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  font-size:30px;
+  cursor:pointer;
+}
+
+.lightbox-arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:45px;
+  height:55px;
+  border:1px solid #ffffff55;
+  border-radius:15px;
+  color:white;
+  background:#ffffff20;
+  font-size:35px;
+  cursor:pointer;
+}
+
+.lightbox-prev{left:15px}
+.lightbox-next{right:15px}
+
+#lightboxCaption{
+  color:#ffe0ef;
+  margin-top:18px;
+  text-align:center;
+}
+
+/* النوافذ الرومانسية */
+
+.romantic-modal{
+  position:fixed;
+  inset:0;
+  z-index:6000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(12,5,20,.82);
+  backdrop-filter:blur(16px);
+  opacity:0;
+  visibility:hidden;
+  transition:all .4s ease;
+}
+
+.romantic-modal.active{
+  opacity:1;
+  visibility:visible;
+}
+
+.modal-content{
+  position:relative;
+  width:min(450px,100%);
+  padding:35px 25px;
+  border-radius:28px;
+  border:1px solid #ffb4d855;
+  background:linear-gradient(
+    145deg,
+    #48213f,
+    #25152f
+  );
+  color:#fff;
+  text-align:center;
+  box-shadow:0 25px 80px #0007;
+  transform:translateY(35px) scale(.9);
+  transition:transform .5s ease;
+}
+
+.romantic-modal.active .modal-content{
+  transform:translateY(0) scale(1);
+}
+
+.modal-content h2{
+  color:#ffb9d9;
+  margin:15px 0;
+}
+
+.modal-content p{
+  color:#f7dce9;
+  line-height:2;
+  font-size:15px;
+}
+
+.modal-icon{
+  font-size:55px;
+  animation:modalPulse 2s infinite;
+}
+
+@keyframes modalPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.15)}
+}
+
+.modal-close{
+  position:absolute;
+  top:12px;
+  right:15px;
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:50%;
+  background:#ffffff20;
+  color:white;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.gift-animation{
+  font-size:75px;
+  animation:giftBounce 1.5s infinite;
+}
+
+@keyframes giftBounce{
+  0%,100%{transform:translateY(0) rotate(0)}
+  30%{transform:translateY(-12px) rotate(-8deg)}
+  60%{transform:translateY(-5px) rotate(8deg)}
+}
+
+.gift-stars{
+  margin:20px 0;
+  font-size:24px;
+  animation:starsGlow 2s infinite alternate;
+}
+
+@keyframes starsGlow{
+  from{filter:brightness(.8)}
+  to{filter:brightness(1.5)}
+}
+
+@media(max-width:520px){
+  .modal-content{
+    padding:30px 18px;
+  }
+
+  .photo-lightbox img{
+    max-width:90vw;
+    max-height:65vh;
+  }
+
+  .lightbox-arrow{
+    width:35px;
+    height:45px;
+    font-size:27px;
+  }
+}
+</style>
+
+<script>
+/* =========================================
+   FINAL INTERACTION SYSTEM
+========================================= */
+
+(function(){
+
+  "use strict";
+
+  /* الصور */
+
+  let photoElements = [];
+  let currentPhoto = 0;
+
+  function collectPhotos(){
+
+    photoElements = Array.from(
+      document.querySelectorAll(
+        ".photo img, .gallery img, .photo-card img"
+      )
+    );
+
+  }
+
+  window.openPhoto = function(index){
+
+    collectPhotos();
+
+    if(!photoElements.length) return;
+
+    currentPhoto =
+      Math.max(0,Math.min(index,photoElements.length-1));
+
+    showCurrentPhoto();
+
+  };
+
+  function showCurrentPhoto(){
+
+    const image =
+      document.getElementById("lightboxImage");
+
+    const caption =
+      document.getElementById("lightboxCaption");
+
+    const lightbox =
+      document.getElementById("photoLightbox");
+
+    if(!image || !photoElements.length) return;
+
+    const selected =
+      photoElements[currentPhoto];
+
+    image.src = selected.src;
+
+    image.alt =
+      selected.alt || "ذكرى جميلة";
+
+    caption.textContent =
+      selected.alt || "لحظة جميلة 💗";
+
+    lightbox.classList.add("active");
+
+    document.body.style.overflow = "hidden";
+
+  }
+
+  window.changePhoto = function(direction){
+
+    collectPhotos();
+
+    if(!photoElements.length) return;
+
+    currentPhoto =
+      (currentPhoto + direction + photoElements.length)
+      % photoElements.length;
+
+    showCurrentPhoto();
+
+  };
+
+  window.closePhoto = function(){
+
+    const lightbox =
+      document.getElementById("photoLightbox");
+
+    if(lightbox){
+
+      lightbox.classList.remove("active");
+
+    }
+
+    document.body.style.overflow = "";
+
+  };
+
+
+  /* فتح الصور عند الضغط */
+
+  document.addEventListener("click",function(event){
+
+    const image =
+      event.target.closest(
+        ".photo img, .gallery img, .photo-card img"
+      );
+
+    if(!image) return;
+
+    if(
+      image.closest("a") ||
+      image.dataset.noLightbox === "true"
+    ) return;
+
+    collectPhotos();
+
+    const index =
+      photoElements.indexOf(image);
+
+    if(index >= 0){
+
+      window.openPhoto(index);
+
+    }
+
+  });
+
+
+  /* إغلاق الصور بالضغط على الخلفية */
+
+  const lightbox =
+    document.getElementById("photoLightbox");
+
+  if(lightbox){
+
+    lightbox.addEventListener("click",function(event){
+
+      if(event.target === lightbox){
+
+        window.closePhoto();
+
+      }
+
+    });
+
+  }
+
+
+  /* لوحة الرسالة السرية */
+
+  window.openSecret = function(message){
+
+    const modal =
+      document.getElementById("secretModal");
+
+    const text =
+      document.getElementById("secretMessage");
+
+    if(text && message){
+
+      text.textContent = message;
+
+    }
+
+    if(modal){
+
+      modal.classList.add("active");
+
+      document.body.style.overflow = "hidden";
+
+    }
+
+  };
+
+  window.closeSecret = function(){
+
+    const modal =
+      document.getElementById("secretModal");
+
+    if(modal){
+
+      modal.classList.remove("active");
+
+    }
+
+    document.body.style.overflow = "";
+
+  };
+
+
+  /* المفاجأة */
+
+  window.openGift = function(){
+
+    const modal =
+      document.getElementById("giftModal");
+
+    if(modal){
+
+      modal.classList.add("active");
+
+      document.body.style.overflow = "hidden";
+
+      if(typeof window.celebrate === "function"){
+
+        window.celebrate();
+
+      }
+
+    }
+
+  };
+
+  window.closeGift = function(){
+
+    const modal =
+      document.getElementById("giftModal");
+
+    if(modal){
+
+      modal.classList.remove("active");
+
+    }
+
+    document.body.style.overflow = "";
+
+  };
+
+
+  /* نافذة معلومات الموسيقى */
+
+  window.openMusicInfo = function(){
+
+    const modal =
+      document.getElementById("musicModal");
+
+    if(modal){
+
+      modal.classList.add("active");
+
+    }
+
+  };
+
+  window.closeMusicInfo = function(){
+
+    const modal =
+      document.getElementById("musicModal");
+
+    if(modal){
+
+      modal.classList.remove("active");
+
+    }
+
+  };
+
+
+  /* التحكم بالموسيقى الموجودة في الصفحة */
+
+  window.toggleMusic = function(){
+
+    const audio =
+      document.querySelector(
+        "#backgroundMusic, #music, audio"
+      );
+
+    if(!audio){
+
+      if(typeof window.showRomanceToast === "function"){
+
+        window.showRomanceToast(
+          "أضيفي ملفًا صوتيًا إلى الصفحة أولًا 🎵"
+        );
+
+      }
+
+      return;
+
+    }
+
+    if(audio.paused){
+
+      audio.play().then(function(){
+
+        if(typeof window.showRomanceToast === "function"){
+
+          window.showRomanceToast(
+            "الموسيقى بدأت 🎶"
+          );
+
+        }
+
+      }).catch(function(){
+
+        if(typeof window.showRomanceToast === "function"){
+
+          window.showRomanceToast(
+            "اضغطي مرة أخرى للسماح بتشغيل الصوت."
+          );
+
+        }
+
+      });
+
+    }else{
+
+      audio.pause();
+
+      if(typeof window.showRomanceToast === "function"){
+
+        window.showRomanceToast(
+          "تم إيقاف الموسيقى مؤقتًا 🎵"
+        );
+
+      }
+
+    }
+
+  };
+
+
+  /* اختصارات لوحة المفاتيح */
+
+  document.addEventListener("keydown",function(event){
+
+    if(event.key === "Escape"){
+
+      window.closePhoto();
+
+      window.closeSecret();
+
+      window.closeGift();
+
+      window.closeMusicInfo();
+
+    }
+
+    if(
+      event.key === "ArrowRight" &&
+      document.getElementById("photoLightbox")
+        ?.classList.contains("active")
+    ){
+
+      window.changePhoto(1);
+
+    }
+
+    if(
+      event.key === "ArrowLeft" &&
+      document.getElementById("photoLightbox")
+        ?.classList.contains("active")
+    ){
+
+      window.changePhoto(-1);
+
+    }
+
+  });
+
+
+  /* ربط أزرار المفاجآت الموجودة */
+
+  document.addEventListener("click",function(event){
+
+    const giftButton =
+      event.target.closest(
+        "[data-action='gift'], .open-gift"
+      );
+
+    if(giftButton){
+
+      window.openGift();
+
+    }
+
+    const secretButton =
+      event.target.closest(
+        "[data-action='secret'], .open-secret"
+      );
+
+    if(secretButton){
+
+      window.openSecret();
+
+    }
+
+    const musicButton =
+      event.target.closest(
+        "[data-action='music']"
+      );
+
+    if(musicButton){
+
+      window.toggleMusic();
+
+    }
+
+  });
+
+
+  /* إغلاق النوافذ عند الضغط على الخلفية */
+
+  document.querySelectorAll(
+    ".romantic-modal"
+  ).forEach(function(modal){
+
+    modal.addEventListener("click",function(event){
+
+      if(event.target !== modal) return;
+
+      modal.classList.remove("active");
+
+      document.body.style.overflow = "";
+
+    });
+
+  });
+
+
+  /* تحديث معرض الصور */
+
+  collectPhotos();
+
+  window.addEventListener(
+    "load",
+    collectPhotos
+  );
+
+
+  /* تحية عند فتح الصفحة */
+
+  console.log(
+    "%c My Bubbles | Ines 💗 ",
+    "background:#e98ab8;color:white;padding:12px;border-radius:12px;font-size:18px"
+  );
+
+})();
+</script>
+
+<!-- =========================================
+     END OF MY BUBBLES
+========================================= -->
+
+</body>
+</html>
